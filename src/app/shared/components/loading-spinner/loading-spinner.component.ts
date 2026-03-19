@@ -1,0 +1,80 @@
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-loading-spinner',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    <div class="spinner-container" *ngIf="isLoading">
+      <div class="spinner">
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+      </div>
+      <p class="loading-text">{{ message }}</p>
+    </div>
+  `,
+  styles: [`
+    .spinner-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      gap: 1rem;
+    }
+
+    .spinner {
+      display: inline-block;
+      position: relative;
+      width: 80px;
+      height: 80px;
+    }
+
+    .spinner-ring {
+      box-sizing: border-box;
+      display: block;
+      position: absolute;
+      width: 64px;
+      height: 64px;
+      margin: 8px;
+      border: 4px solid #3f51b5;
+      border-radius: 50%;
+      animation: spinner-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      border-color: #3f51b5 transparent transparent transparent;
+    }
+
+    .spinner-ring:nth-child(1) {
+      animation-delay: -0.45s;
+    }
+
+    .spinner-ring:nth-child(2) {
+      animation-delay: -0.3s;
+    }
+
+    .spinner-ring:nth-child(3) {
+      animation-delay: -0.15s;
+    }
+
+    @keyframes spinner-ring {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loading-text {
+      margin: 0;
+      color: #666;
+      font-size: 14px;
+    }
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class LoadingSpinnerComponent {
+  @Input() isLoading = false;
+  @Input() message = 'Loading...';
+}
