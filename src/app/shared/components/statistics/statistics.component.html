@@ -1,0 +1,52 @@
+<div class="statistics-container">
+  <h2>Statistics Dashboard</h2>
+  
+  <div class="charts-grid">
+    @if (taskCompletionChartData$ | async; as data) {
+      <div class="chart-card">
+        <h3>Task Completion Status</h3>
+        <canvas
+          baseChart
+          [data]="data"
+          [options]="taskCompletionChartOptions"
+          type="doughnut">
+        </canvas>
+      </div>
+    }
+
+    @if (completionRateChartData$ | async; as data) {
+      <div class="chart-card">
+        <h3>Completion Rate</h3>
+        <canvas
+          baseChart
+          [data]="data"
+          [options]="completionRateChartOptions"
+          type="line">
+        </canvas>
+      </div>
+    }
+  </div>
+
+  <div class="stats-summary">
+    @if (statistics$ | async; as stats) {
+      <div class="stat-block">
+        <div class="stat-item">
+          <span class="stat-label">Total Tasks</span>
+          <span class="stat-value">{{ stats.total }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Completed</span>
+          <span class="stat-value completed">{{ stats.completed }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Pending</span>
+          <span class="stat-value pending">{{ stats.pending }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Completion Rate</span>
+          <span class="stat-value">{{ stats.completionRate | number: '1.2-2' }}%</span>
+        </div>
+      </div>
+    }
+  </div>
+</div>

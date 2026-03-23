@@ -89,23 +89,13 @@ describe('TasksListComponent', () => {
   });
 
   it('should set filter', () => {
-    component.setFilter('COMPLETED');
-    expect(tasksService.setFilter).toHaveBeenCalledWith('COMPLETED');
+    component.setFilter('completed');
+    expect(tasksService.setFilter).toHaveBeenCalledWith('completed');
   });
 
-  it('should toggle task completion', () => {
-    const mockTask: Task = {
-      id: 1,
-      userId: 1,
-      title: 'Test Task',
-      completed: false
-    };
-
-    component.toggleTaskCompletion(mockTask);
-    expect(tasksState.updateTask).toHaveBeenCalledWith({
-      ...mockTask,
-      completed: true
-    });
+  it('should toggle task status', () => {
+    component.toggleTaskStatus(1, true);
+    expect(tasksService.loadTasks).toHaveBeenCalled();
   });
 
   it('should go to next page', () => {
@@ -118,19 +108,19 @@ describe('TasksListComponent', () => {
     expect(tasksService.setCurrentPage).toHaveBeenCalled();
   });
 
-  it('should open task form', () => {
-    component.openTaskForm();
-    expect(component.showTaskForm).toBe(true);
+  it('should open create task form', () => {
+    component.openCreateTaskForm();
+    expect(component.showCreateTaskForm).toBe(true);
   });
 
-  it('should close task form', () => {
-    component.showTaskForm = true;
-    component.closeTaskForm();
-    expect(component.showTaskForm).toBe(false);
+  it('should close create task form', () => {
+    component.showCreateTaskForm = true;
+    component.closeCreateTaskForm();
+    expect(component.showCreateTaskForm).toBe(false);
   });
 
-  it('should go back to projects', () => {
-    component.goBack();
+  it('should navigate back to projects', () => {
+    component.navigateBack();
     expect(router.navigate).toHaveBeenCalledWith(['/projects']);
   });
 

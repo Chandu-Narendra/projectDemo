@@ -21,34 +21,34 @@ describe('TaskFormComponent', () => {
   });
 
   it('should initialize form with empty values', () => {
-    expect(component.form.get('title')?.value).toBe('');
-    expect(component.form.get('completed')?.value).toBe(false);
+    expect(component.taskForm.get('title')?.value).toBe('');
+    expect(component.taskForm.get('completed')?.value).toBe(false);
   });
 
   it('should validate required title field', () => {
-    const titleControl = component.form.get('title');
+    const titleControl = component.taskForm.get('title');
     titleControl?.setValue('');
     titleControl?.markAsTouched();
 
     expect(titleControl?.hasError('required')).toBe(true);
-    expect(component.getTitleErrors()).toContain('Title is required');
+    expect(component.isFieldInvalid('title')).toBe(true);
   });
 
   it('should validate minimum length for title', () => {
-    const titleControl = component.form.get('title');
+    const titleControl = component.taskForm.get('title');
     titleControl?.setValue('Test');
     titleControl?.markAsTouched();
 
     expect(titleControl?.hasError('minlength')).toBe(true);
-    expect(component.getTitleErrors()).toContain('Title must be at least 5 characters');
+    expect(component.isFieldInvalid('title')).toBe(true);
   });
 
   it('should allow valid title', () => {
-    const titleControl = component.form.get('title');
+    const titleControl = component.taskForm.get('title');
     titleControl?.setValue('Valid Task Title');
 
     expect(titleControl?.valid).toBe(true);
-    expect(titleControl?.hasError('minlength')).toBe(false);
+    expect(component.isFieldInvalid('title')).toBe(false);
   });
 
   it('should allow form submission with valid data', (done) => {
@@ -58,7 +58,7 @@ describe('TaskFormComponent', () => {
       done();
     });
 
-    component.form.patchValue({
+    component.taskForm.patchValue({
       title: 'Valid Task Title',
       completed: false
     });
@@ -73,7 +73,7 @@ describe('TaskFormComponent', () => {
       submitted = true;
     });
 
-    component.form.patchValue({
+    component.taskForm.patchValue({
       title: 'Test',
       completed: false
     });
@@ -91,11 +91,11 @@ describe('TaskFormComponent', () => {
       done();
     });
 
-    component.onDismiss();
+    component.onClose();
   });
 
   it('should mark form as touched on submit attempt', () => {
-    const titleControl = component.form.get('title');
+    const titleControl = component.taskForm.get('title');
     expect(titleControl?.touched).toBe(false);
 
     component.onSubmit();
@@ -105,12 +105,12 @@ describe('TaskFormComponent', () => {
 
   it('should reset form after successful submission', (done) => {
     component.submit.subscribe(() => {
-      expect(component.form.get('title')?.value).toBe('');
-      expect(component.form.get('completed')?.value).toBe(false);
+      expect(component.taskForm.get('title')?.value).toBe('');
+      expect(component.taskForm.get('completed')?.value).toBe(false);
       done();
     });
 
-    component.form.patchValue({
+    component.taskForm.patchValue({
       title: 'Test Task Title',
       completed: false
     });

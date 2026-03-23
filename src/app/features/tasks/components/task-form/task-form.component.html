@@ -1,0 +1,66 @@
+<div class="modal-overlay" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>Create New Task</h2>
+      <button class="modal-close" (click)="onClose()">✕</button>
+    </div>
+
+    <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="task-form">
+      <div class="form-group">
+        <label for="title">Task Title *</label>
+        <input
+          id="title"
+          type="text"
+          class="form-input"
+          formControlName="title"
+          placeholder="Enter task title"
+          [class.error]="isFieldInvalid('title')"
+        />
+        @if (isFieldInvalid('title')) {
+          <span class="error-message">
+            @if (taskForm.get('title')?.errors?.['required']) {
+              <span>
+                Title is required
+              </span>
+            }
+            @if (taskForm.get('title')?.errors?.['minlength']) {
+              <span>
+                Title must be at least 5 characters
+              </span>
+            }
+          </span>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="status">Status *</label>
+        <select
+          id="status"
+          class="form-input"
+          formControlName="completed"
+          [class.error]="isFieldInvalid('completed')"
+        >
+          <option [value]="false">Pending</option>
+          <option [value]="true">Completed</option>
+        </select>
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="button"
+          class="btn-cancel"
+          (click)="onClose()"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          class="btn-submit"
+          [disabled]="!taskForm.valid"
+        >
+          Create Task
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

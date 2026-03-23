@@ -1,0 +1,97 @@
+<div class="projects-container">
+  <div class="projects-header">
+    <h1>Projects</h1>
+    <div class="header-controls">
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Search projects..."
+        (change)="onSearch($event)"
+        [value]="searchValue"
+      />
+      <!-- <label class="error-toggle">
+        <input type="checkbox" (change)="toggleErrorSimulation($event)" />
+        Simulate Errors
+      </label> -->
+    </div>
+  </div>
+
+  <!-- Error Banner -->
+  <app-error-banner
+    [error]="error$ | async"
+    [showRetry]="true"
+    (retry)="onRetry()"
+  ></app-error-banner>
+
+  <!-- Loading Spinner -->
+  <app-loading-spinner
+    [isLoading]="(loading$ | async) ?? false"
+    message="Loading projects..."
+  ></app-loading-spinner>
+
+  <!-- Projects List -->
+  @if ((loading$ | async) === false) {
+    <div class="projects-list">
+      @if (projects$ | async; as projects) {
+        <table class="projects-table">
+          <thead>
+            <tr>
+              <th>Project Name</th>
+              <th>Email</th>
+              <th>Tasks</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (project of projects; track project.id) {
+              <tr class="project-row">
+                <td class="project-name">{{ project.name }}</td>
+                <td class="project-email">{{ project.email }}</td>
+                <td class="project-tasks">{{ project.taskCount }}</td>
+                <td class="project-actions">
+                  <button
+                    class="view-button"
+                    (click)="viewTasks(project.id)"
+                  >
+                    View Tasks →
+                  </button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+
+      <!-- Empty State -->
+      <app-empty-state
+        [isEmpty]="(projects$ | async)?.length === 0"
+        title="No Projects Found"
+        message="Try adjusting your search criteria"
+        icon="📊"
+      ></app-empty-state>
+    </div>
+  }
+
+  <!-- Pagination -->
+  @if ((projects$ | async)?.length ?? 0 > 0) {
+    <div class="pagination-controls">
+      <button
+        class="pagination-button"
+        (click)="previousPage()"
+        [disabled]="(currentPage$ | async) === 1"
+      >
+        ← Previous
+      </button>
+      <span class="pagination-info">
+        Page {{ (currentPage$ | async) ?? 1 }} of {{ (totalPages$ | async) ?? 1 }}
+      </span>
+      <button
+        class="pagination-button"
+        (click)="nextPage()"
+        [disabled]="(currentPage$ | async) === (totalPages$ | async)"
+      >
+        Next →
+      </button>
+    </div>
+  }
+</div>

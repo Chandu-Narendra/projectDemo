@@ -1,0 +1,12 @@
+@if (isEmpty) {
+  <div class="empty-state-container">
+    <div class="empty-state-icon">{{ icon }}</div>
+    <h3 class="empty-state-title">{{ title }}</h3>
+    <p class="empty-state-message">{{ message }}</p>
+    @if (actionLabel) {
+      <button class="empty-state-action" (click)="onAction()">
+        {{ actionLabel }}
+      </button>
+    }
+  </div>
+}

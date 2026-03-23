@@ -1,0 +1,21 @@
+@if (error) {
+  <div class="error-banner" [@slideDown]>
+    <div class="error-content">
+      <span class="error-icon">⚠️</span>
+      <div class="error-message">
+        <strong>Error:</strong> {{ error.message }}
+        @if (error.status) {
+          <small class="error-status">({{ error.status }})</small>
+        }
+      </div>
+      <button class="error-close" (click)="onDismiss()" aria-label="Close error">
+        ✕
+      </button>
+    </div>
+    @if (showRetry) {
+      <div class="error-actions">
+        <button class="retry-button" (click)="retry.emit()">Retry</button>
+      </div>
+    }
+  </div>
+}
